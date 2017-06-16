@@ -8,6 +8,7 @@
         toggleChildren: function(options){
             // OPTIONS
             var defaults = {
+                selector:   '> *',
                 max:        3,
                 speed:      1000,
                 moreText:   'READ MORE',
@@ -18,25 +19,26 @@
 
             // FOR EACH MATCHED ELEMENT
             return this.each(function() {
-                var $container =        $(this);
                 var op =                options;
-                var totalListItems =    $container.children("li").length;
-                var speedPerLI;
+                var $container =        $(this);
+                var $children =         $container.find(op.selector);
+                var totalChildren =     $children.length;
+                var speedPerChild;
 
                 // Get animation speed per LI; Divide the total speed by num of LIs. 
                 // Avoid dividing by 0 and make it at least 1 for small numbers.
-                if ( totalListItems > 0 && op.speed > 0  ){ 
-                    speedPerLI = Math.round( op.speed / totalListItems );
-                    if ( speedPerLI < 1 ) { speedPerLI = 1; }
+                if ( totalChildren > 0 && op.speed > 0  ){ 
+                    speedPerChild = Math.round( op.speed / totalChildren );
+                    if ( speedPerChild < 1 ) { speedPerChild = 1; }
                 } else { 
-                    speedPerLI = 0; 
+                    speedPerChild = 0; 
                 }
 
                 // If list has more than the "max" option
-                if ( (totalListItems > 0) && (totalListItems > op.max) )
+                if ( (totalChildren > 0) && (totalChildren > op.max) )
                 {
                     // Initial Page Load: Hide each LI element over the max
-                    $container.children("li").each(function(index){
+                    $children.each(function(index){
                         if ( (index+1) > op.max ) {
                             $(this).hide(0);
                         } else {
@@ -45,7 +47,7 @@
                     });
 
                     // Replace [COUNT] in "moreText" or "lessText" with number of items beyond max
-                    var howManyMore = totalListItems - op.max;
+                    var howManyMore = totalChildren - op.max;
                     var newMoreText = op.moreText;
                     var newLessText = op.lessText;
 
@@ -70,20 +72,19 @@
                                 var $theLink = $(this);
 
                                 // Get array of children past the maximum option 
-                                var listElements = $theLink.parent().prev("ul, ol").children("li"); 
-                                listElements = listElements.slice(op.max);
+                                var $childrenSliced = $children.slice(op.max);
 
                                 // Sequentially slideToggle the list items
                                 // For more info on this awesome function: http://goo.gl/dW0nM
                                 if ( $theLink.html() == newMoreText ){
                                     $(this).html(newLessText);
                                     var i = 0; 
-                                    (function() { $(listElements[i++] || []).slideToggle(speedPerLI,arguments.callee); })();
+                                    (function() { $($childrenSliced[i++] || []).slideToggle(speedPerChild,arguments.callee); })();
                                 } 
                                 else {			
                                     $theLink.html(newMoreText);
-                                    var i = listElements.length - 1; 
-                                    (function() { $(listElements[i--] || []).slideToggle(speedPerLI,arguments.callee); })();
+                                    var i = $childrenSliced.length - 1; 
+                                    (function() { $($childrenSliced[i--] || []).slideToggle(speedPerChild,arguments.callee); })();
                                 }
 
                                 // Prevent Default Click Behavior (Scrolling)
@@ -97,7 +98,7 @@
                         $container.next(".maxlist-more").hide();
                     }
                     // Show all list items that may have been hidden
-                    $container.children("li").each(function(index){
+                    $children.each(function(index){
                         $(this).show(0);
                     });
                 }
