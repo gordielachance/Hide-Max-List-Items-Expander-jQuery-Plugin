@@ -75,8 +75,9 @@
                                 var $childrenSliced = $children.slice(op.max);
 
                                 // Sequentially slideToggle the list items
+                                var isReadMore = ( $theLink.html() == newMoreText );
                                 // For more info on this awesome function: http://goo.gl/dW0nM
-                                if ( $theLink.html() == newMoreText ){
+                                if ( isReadMore ){
                                     $(this).html(newLessText);
                                     var i = 0; 
                                     (function() { $($childrenSliced[i++] || []).slideToggle(speedPerChild,arguments.callee); })();
