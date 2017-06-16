@@ -91,7 +91,7 @@
                         // For more info on this awesome function: http://goo.gl/dW0nM
                         var i = 0;
                         $childrenSliced.each(function () {
-                          $(this).delay(speedPerChild*i).slideDown(speedPerChild);
+                          $(this).delay(speedPerChild*i).slideDown(speedPerChild,'linear');
                           i++;
                         });
 
@@ -110,7 +110,7 @@
 
                         var i = $childrenSliced.length - 1; 
                         $childrenSliced.each(function () {
-                          $(this).delay(speedPerChild*i).slideUp(speedPerChild);
+                          $(this).delay(speedPerChild*i).slideUp(speedPerChild,'linear');
                           i--;
                         });
 
