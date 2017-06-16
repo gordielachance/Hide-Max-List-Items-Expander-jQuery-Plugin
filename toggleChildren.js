@@ -5,7 +5,7 @@
 // Usage: Free and Open Source. WTFPL: http://sam.zoy.org/wtfpl/
 (function($){
     $.fn.extend({ 
-        hideMaxListItems: function(options){
+        toggleChildren: function(options){
             // OPTIONS
             var defaults = {
                 max:        3,
@@ -18,9 +18,9 @@
 
             // FOR EACH MATCHED ELEMENT
             return this.each(function() {
-                var $thisList =         $(this);
+                var $container =        $(this);
                 var op =                options;
-                var totalListItems =    $thisList.children("li").length;
+                var totalListItems =    $container.children("li").length;
                 var speedPerLI;
 
                 // Get animation speed per LI; Divide the total speed by num of LIs. 
@@ -36,7 +36,7 @@
                 if ( (totalListItems > 0) && (totalListItems > op.max) )
                 {
                     // Initial Page Load: Hide each LI element over the max
-                    $thisList.children("li").each(function(index){
+                    $container.children("li").each(function(index){
                         if ( (index+1) > op.max ) {
                             $(this).hide(0);
                         } else {
@@ -55,14 +55,14 @@
                     }
 
                     // Add "Read More" button, or unhide it if it already exists
-                    if ( $thisList.next(".maxlist-more").length > 0 ){
-                        $thisList.next(".maxlist-more").show();
+                    if ( $container.next(".maxlist-more").length > 0 ){
+                        $container.next(".maxlist-more").show();
                     } else {
-                        $thisList.after(op.moreHTML);
+                        $container.after(op.moreHTML);
                     }
 
                     // READ MORE - add text within button, register click event that slides the items up and down
-                    $thisList.next(".maxlist-more")
+                    $container.next(".maxlist-more")
                         .children("a")
                             .html(newMoreText)
                             .off('click')
@@ -93,11 +93,11 @@
                 else {
                     // LIST HAS LESS THAN THE MAX
                     // Hide "Read More" button if it's there
-                    if ( $thisList.next(".maxlist-more").length > 0 ){
-                        $thisList.next(".maxlist-more").hide();
+                    if ( $container.next(".maxlist-more").length > 0 ){
+                        $container.next(".maxlist-more").hide();
                     }
                     // Show all list items that may have been hidden
-                    $thisList.children("li").each(function(index){
+                    $container.children("li").each(function(index){
                         $(this).show(0);
                     });
                 }
