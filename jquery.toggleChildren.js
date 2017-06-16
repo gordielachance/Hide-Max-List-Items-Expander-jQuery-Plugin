@@ -13,7 +13,7 @@
                 speed:      1000,
                 moreText:   'READ MORE',
                 lessText:   'READ LESS',
-                moreHTML:   '<p class="maxlist-more"><a href="#"></a></p>', // requires class and child <a>
+                moreHTML:   '<p class="toggle-children-link"><a href="#"></a></p>', // requires class and child <a>
             };
             var options =  $.extend(defaults, options);
 
@@ -57,14 +57,14 @@
                     }
 
                     // Add "Read More" button, or unhide it if it already exists
-                    if ( $container.next(".maxlist-more").length > 0 ){
-                        $container.next(".maxlist-more").show();
+                    if ( $container.next(".toggle-children-link").length > 0 ){
+                        $container.next(".toggle-children-link").show();
                     } else {
                         $container.after(op.moreHTML);
                     }
 
                     // READ MORE - add text within button, register click event that slides the items up and down
-                    $container.next(".maxlist-more")
+                    $container.next(".toggle-children-link")
                         .children("a")
                             .html(newMoreText)
                             .off('click')
@@ -94,8 +94,8 @@
                 else {
                     // LIST HAS LESS THAN THE MAX
                     // Hide "Read More" button if it's there
-                    if ( $container.next(".maxlist-more").length > 0 ){
-                        $container.next(".maxlist-more").hide();
+                    if ( $container.next(".toggle-children-link").length > 0 ){
+                        $container.next(".toggle-children-link").hide();
                     }
                     // Show all list items that may have been hidden
                     $children.each(function(index){

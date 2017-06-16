@@ -28,15 +28,15 @@ $(document).ready(function() {
         'speed':2000,
     	'moreText':'READ MORE',
 		'lessText':'READ LESS <em>Can Use HTML</em>',
-        'moreHTML': '<p class="maxlist-more"><a href="#"></a></p>'
+        'moreHTML': '<p class="toggle-children-link"><a href="#"></a></p>'
     });
 });
 ```
 
-Note that the expand/collapse container requires the “maxlist-more” class, and a child anchor tag. I've left his as an option in case you wanted to do something like:
+Note that the expand/collapse container requires the “toggle-children-link” class, and a child anchor tag. I've left his as an option in case you wanted to do something like:
 
 ```
-'moreHTML': '<div class="maxlist-more someOtherClass"><span class="someOtherExampleWrapper"><a class="myButtonClass" href="#"></a></span></div>'
+'moreHTML': '<div class="toggle-children-link someOtherClass"><span class="someOtherExampleWrapper"><a class="myButtonClass" href="#"></a></span></div>'
 ```
 
 ## INCLUDE MAX ITEM COUNT

@@ -23,9 +23,9 @@ h2 {
 ul li { margin-bottom: 1px; }
 
 /* READ MORE BUTTON */
-.maxlist-more { padding-left: 26px; font-weight: bold; }
-.maxlist-more a { text-decoration:none; border-bottom: 1px dotted #D3572A; color:#D3572A; }
-.maxlist-more a:hover { text-decoration:none; border-color: #A33713; color:#B72D00; } 
+.toggle-children-link { padding-left: 26px; font-weight: bold; }
+.toggle-children-link a { text-decoration:none; border-bottom: 1px dotted #D3572A; color:#D3572A; }
+.toggle-children-link a:hover { text-decoration:none; border-color: #A33713; color:#B72D00; } 
 
 
 
