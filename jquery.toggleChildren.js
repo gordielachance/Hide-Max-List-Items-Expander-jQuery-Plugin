@@ -11,8 +11,8 @@
                 selector:   '> *',
                 max:        3,
                 speed:      1000,
-                moreText:   'READ MORE',
-                lessText:   'READ LESS',
+                moreText:   'Read more',
+                lessText:   'Read less',
                 moreHTML:   '<p class="toggle-children-link"><a href="#"></a></p>', // requires class and child <a>
             };
             var options =  $.extend(defaults, options);
