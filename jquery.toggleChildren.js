@@ -90,7 +90,10 @@
                         // Sequentially show the list items
                         // For more info on this awesome function: http://goo.gl/dW0nM
                         var i = 0;
-                        (function() { $($childrenSliced[i++] || []).slideDown(speedPerChild,arguments.callee); })();
+                        $childrenSliced.each(function () {
+                          $(this).delay(speedPerChild*i).slideDown(speedPerChild);
+                          i++;
+                        });
 
                         // Prevent Default Click Behavior (Scrolling)
                         e.preventDefault();
@@ -105,10 +108,11 @@
                         // Get array of children past the maximum option 
                         var $childrenSliced = $children.slice(op.max);
 
-                        // Sequentially hide the list items
-                        // For more info on this awesome function: http://goo.gl/dW0nM
                         var i = $childrenSliced.length - 1; 
-                        (function() { $($childrenSliced[i--] || []).slideUp(speedPerChild,arguments.callee); })();
+                        $childrenSliced.each(function () {
+                          $(this).delay(speedPerChild*i).slideUp(speedPerChild);
+                          i--;
+                        });
 
                         // Prevent Default Click Behavior (Scrolling)
                         e.preventDefault();
