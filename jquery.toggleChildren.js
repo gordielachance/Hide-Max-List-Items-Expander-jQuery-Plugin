@@ -8,12 +8,14 @@
         toggleChildren: function(options){
             // OPTIONS
             var defaults = {
-                selector:   '> *',
-                max:        3,
-                speed:      1000,
-                moreText:   'Read more',
-                lessText:   'Read less',
-                moreHTML:   '<p class="toggle-children-link"><a href="#"></a></p>', // requires class and child <a>
+                childrenSelector:       '> *',
+                btMore:                 null, //jQuery item or selector
+                btLess:                 null, //jQuery item or selector
+                childrenShowCount:      false,
+                max:                    3,
+                speed:                  1000,
+                moreText:               'Read more', //if btMore is not defined
+                lessText:               'Read less', //if btLess is not defined
             };
             var options =  $.extend(defaults, options);
 
@@ -21,9 +23,39 @@
             return this.each(function() {
                 var op =                options;
                 var $container =        $(this);
-                var $children =         $container.find(op.selector);
+                var $children =         $container.find(op.childrenSelector);
                 var totalChildren =     $children.length;
+                var $btMore;
+                var $btLess;
                 var speedPerChild;
+                
+                // Get or create "Read More" button
+                if ( op.btMore && $(op.btMore).length ) {
+                    $btMore = $(op.btMore);
+                }else{
+                    $btMore = $('<a href="#">'+op.moreText+'</a>');
+                    $container.after($btMore);
+                }
+
+                $btMore.addClass('toggle-children-link toggle-children-more');
+                
+                // Show children count
+                if(op.childrenShowCount){
+                    $itemsCount = $('<small />');
+                    $itemsCount.text(totalChildren - op.max);
+                    $btMore.append($itemsCount);   
+                }
+
+                // Get or create "Read less" button
+                if ( op.btLess && $(op.btLess).length ) {
+                    $btLess = $(op.btLess);
+                }else{
+                    $btLess = $('<a href="#">'+op.lessText+'</a>');
+                    $container.after($btLess);
+                }
+
+                $btLess.addClass('toggle-children-link toggle-childrenless');
+                $btLess.hide(); //hide it by default
 
                 // Get animation speed per LI; Divide the total speed by num of LIs. 
                 // Avoid dividing by 0 and make it at least 1 for small numbers.
@@ -35,8 +67,8 @@
                 }
 
                 // If list has more than the "max" option
-                if ( (totalChildren > 0) && (totalChildren > op.max) )
-                {
+                if ( (totalChildren > 0) && (totalChildren > op.max) ){
+                    
                     // Initial Page Load: Hide each LI element over the max
                     $children.each(function(index){
                         if ( (index+1) > op.max ) {
@@ -46,58 +78,48 @@
                         }
                     });
 
-                    // Replace [COUNT] in "moreText" or "lessText" with number of items beyond max
-                    var howManyMore = totalChildren - op.max;
-                    var newMoreText = op.moreText;
-                    var newLessText = op.lessText;
+                    // READ MORE
+                    $btMore.off('click').on("click", function(e){
+                        
+                        $btMore.hide();
+                        $btLess.show();
+                        
+                        // Get array of children past the maximum option 
+                        var $childrenSliced = $children.slice(op.max);
 
-                    if ( howManyMore > 0 ){
-                        newMoreText = newMoreText.replace("[COUNT]", howManyMore);
-                        newLessText = newLessText.replace("[COUNT]", howManyMore);
-                    }
+                        // Sequentially show the list items
+                        // For more info on this awesome function: http://goo.gl/dW0nM
+                        var i = 0;
+                        (function() { $($childrenSliced[i++] || []).slideDown(speedPerChild,arguments.callee); })();
 
-                    // Add "Read More" button, or unhide it if it already exists
-                    if ( $container.next(".toggle-children-link").length > 0 ){
-                        $container.next(".toggle-children-link").show();
-                    } else {
-                        $container.after(op.moreHTML);
-                    }
+                        // Prevent Default Click Behavior (Scrolling)
+                        e.preventDefault();
+                    });
+                    
+                    // READ LESS
+                    $btLess.off('click').on("click", function(e){
+                        
+                        $btMore.show();
+                        $btLess.hide();
 
-                    // READ MORE - add text within button, register click event that slides the items up and down
-                    $container.next(".toggle-children-link")
-                        .children("a")
-                            .html(newMoreText)
-                            .off('click')
-                            .on("click", function(e){
-                                var $theLink = $(this);
+                        // Get array of children past the maximum option 
+                        var $childrenSliced = $children.slice(op.max);
 
-                                // Get array of children past the maximum option 
-                                var $childrenSliced = $children.slice(op.max);
+                        // Sequentially hide the list items
+                        // For more info on this awesome function: http://goo.gl/dW0nM
+                        var i = $childrenSliced.length - 1; 
+                        (function() { $($childrenSliced[i--] || []).slideUp(speedPerChild,arguments.callee); })();
 
-                                // Sequentially slideToggle the list items
-                                var isReadMore = ( $theLink.html() == newMoreText );
-                                // For more info on this awesome function: http://goo.gl/dW0nM
-                                if ( isReadMore ){
-                                    $(this).html(newLessText);
-                                    var i = 0; 
-                                    (function() { $($childrenSliced[i++] || []).slideToggle(speedPerChild,arguments.callee); })();
-                                } 
-                                else {			
-                                    $theLink.html(newMoreText);
-                                    var i = $childrenSliced.length - 1; 
-                                    (function() { $($childrenSliced[i--] || []).slideToggle(speedPerChild,arguments.callee); })();
-                                }
-
-                                // Prevent Default Click Behavior (Scrolling)
-                                e.preventDefault();
-                            });
-                } 
-                else {
+                        // Prevent Default Click Behavior (Scrolling)
+                        e.preventDefault();
+                    });
+                    
+                }else {
                     // LIST HAS LESS THAN THE MAX
-                    // Hide "Read More" button if it's there
-                    if ( $container.next(".toggle-children-link").length > 0 ){
-                        $container.next(".toggle-children-link").hide();
-                    }
+                    // Hide buttons
+                    $btMore.hide();
+                    $btLess.hide();
+                    
                     // Show all list items that may have been hidden
                     $children.each(function(index){
                         $(this).show(0);
