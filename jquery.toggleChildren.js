@@ -28,10 +28,12 @@
                 var $btMore;
                 var $btLess;
                 var speedPerChild;
-                
+
                 // Get or create "Read More" button
                 if ( op.btMore && $(op.btMore).length ) {
                     $btMore = $(op.btMore);
+                }else if ( $container.next("toggle-children-more").length > 0 ){ //has already been created
+                    $btMore = $container.next("toggle-children-more");
                 }else{
                     $btMore = $('<a href="#">'+op.moreText+'</a>');
                     $container.after($btMore);
@@ -41,20 +43,26 @@
                 
                 // Show children count
                 if(op.childrenShowCount){
-                    $itemsCount = $('<small />');
+                    if ( $btMore.find("toggle-children-count").length > 0 ){ //has already been created
+                        $itemsCount = $btMore.find("toggle-children-count");
+                    }else{
+                        $itemsCount = $('<small class="toggle-children-count" />');
+                        $btMore.append($itemsCount);   
+                    }
                     $itemsCount.text(totalChildren - op.max);
-                    $btMore.append($itemsCount);   
                 }
 
                 // Get or create "Read less" button
                 if ( op.btLess && $(op.btLess).length ) {
                     $btLess = $(op.btLess);
+                }else if ( $container.next("toggle-children-less").length > 0 ){ //has already been created
+                    $btLess = $container.next("toggle-children-less");
                 }else{
                     $btLess = $('<a href="#">'+op.lessText+'</a>');
                     $container.after($btLess);
                 }
 
-                $btLess.addClass('toggle-children-link toggle-childrenless');
+                $btLess.addClass('toggle-children-link toggle-children-less');
                 $btLess.hide(); //hide it by default
 
                 // Get animation speed per LI; Divide the total speed by num of LIs. 
