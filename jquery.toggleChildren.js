@@ -1,8 +1,7 @@
-// HIDE MAX LIST ITEMS JQUERY PLUGIN
-// Version: 1.36
-// Author: Josh Winn
-// Website: www.joshuawinn.com
-// Usage: Free and Open Source. WTFPL: http://sam.zoy.org/wtfpl/
+/*
+Forked from HIDE MAX LIST ITEMS JQUERY PLUGIN by Josh Winn (https://github.com/jawinn/Hide-Max-List-Items-Expander-jQuery-Plugin)
+*/
+
 (function($){
     $.fn.extend({ 
         toggleChildren: function(options){
@@ -13,7 +12,7 @@
                 btLess:                 null, //jQuery item or selector
                 childrenShowCount:      false,
                 childrenMax:            3,
-                speed:                  1000,
+                speed:                  500,
                 moreText:               'Read more', //if btMore is not defined
                 lessText:               'Read less', //if btLess is not defined
             };
@@ -28,6 +27,13 @@
                 var $btMore;
                 var $btLess;
                 var speedPerChild;
+                var $itemsCount;
+                
+                //Wrap into a container
+                var hasInit = ( $container.parent(".toggle-children-container").length > 0 );
+                if ( !hasInit ){
+                    $container = $container.wrap('<p class="toggle-children-container" />');
+                }
 
                 // Get or create "Read More" button
                 if ( op.btMore && $(op.btMore).length ) {
@@ -44,12 +50,12 @@
                 // Show children count
                 if(op.childrenShowCount){
                     if ( $btMore.find(".toggle-children-count").length > 0 ){ //has already been created
-                        $itemsCount = $btMore.find("toggle-children-count");
+                        $itemsCount = $btMore.find(".toggle-children-count");
                     }else{
                         $itemsCount = $('<small class="toggle-children-count" />');
                         $btMore.append($itemsCount);   
                     }
-                    $itemsCount.text(' ' + (totalChildren - op.childrenMax));
+                    $itemsCount.text(' +' + (totalChildren - op.childrenMax));
                 }
 
                 // Get or create "Read less" button
